@@ -16,38 +16,36 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
-
 const CopilotView = walkthroughable(View);
-
 
 const TabNavigator = () => {
   const { start, copilotEvents  } = useCopilot();
 
   useEffect(() => {
-  const handleStart = async () => {
-    try {
-      const hasSeen = await AsyncStorage.getItem('hasSeenTour');
-      if (!hasSeen) {
-        await start();
-        await AsyncStorage.setItem('hasSeenTour', 'true');
+    const handleStart = async () => {
+      try {
+        const hasSeen = await AsyncStorage.getItem('hasSeenTour');
+        if (!hasSeen) {
+          await start();
+          await AsyncStorage.setItem('hasSeenTour', 'true');
+        }
+      } catch (err) {
+        console.error(err);
       }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    };
 
-  copilotEvents.on('start', handleStart);
-  
-  // Start the tour after a short delay
-  const timer = setTimeout(() => {
-    handleStart();
-  }, 1000);
+    copilotEvents.on('start', handleStart);
+    
+    // Start the tour after a short delay
+    const timer = setTimeout(() => {
+      handleStart();
+    }, 1000);
 
-  return () => {
-    copilotEvents.off('start', handleStart);
-    clearTimeout(timer);
-  };
-}, [start, copilotEvents]);
+    return () => {
+      copilotEvents.off('start', handleStart);
+      clearTimeout(timer);
+    };
+  }, [start, copilotEvents]);
 
   return (
     <Tab.Navigator
@@ -64,7 +62,6 @@ const TabNavigator = () => {
           />
         ), 
       }}>
-    
       <Tab.Screen
         name="Home"
         component={HomeScreen}
@@ -77,27 +74,29 @@ const TabNavigator = () => {
                 focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
               }
             />
-            
-            
           ),
         }}></Tab.Screen>
-
       <Tab.Screen
         name="Cart"
         component={CartScreen}
         options={{
           tabBarIcon: ({focused, color, size}) => (
-            <CopilotStep text="This is the cart tab" order={4} name="cart">
-                <CopilotView >
-            <CustomIcon
-              name="cart"
-              size={25}
-              color={
-                focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
-              }
-            />
-             </CopilotView>
-        </CopilotStep>
+            <CopilotStep 
+  text={`🛒 Your Shopping Cart\n\n• View selected coffee items\n• Adjust quantities easily\n• Proceed to secure checkout!`} 
+  order={5} 
+  name="cart"
+>
+
+              <CopilotView>
+                <CustomIcon
+                  name="cart"
+                  size={25}
+                  color={
+                    focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
+                  }
+                />
+              </CopilotView>
+            </CopilotStep>
           ),
         }}></Tab.Screen>
       <Tab.Screen
@@ -105,17 +104,22 @@ const TabNavigator = () => {
         component={FavoritesScreen}
         options={{
           tabBarIcon: ({focused, color, size}) => (
-            <CopilotStep text="This is the favourite tab" order={5} name="favourite">
-                <CopilotView >
-            <CustomIcon
-              name="like"
-              size={25}
-              color={
-                focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
-              }
-            />
-             </CopilotView>
-        </CopilotStep>
+            <CopilotStep 
+  text={`❤️ Your Favorites\n\n• Save your most loved coffees\n• Access them quickly anytime\n• Keep track of your perfect brews!`} 
+  order={6} 
+  name="favourite"
+>
+
+              <CopilotView>
+                <CustomIcon
+                  name="like"
+                  size={25}
+                  color={
+                    focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
+                  }
+                />
+              </CopilotView>
+            </CopilotStep>
           ),
         }}></Tab.Screen>
       <Tab.Screen
@@ -123,17 +127,21 @@ const TabNavigator = () => {
         component={OrderHistoryScreen}
         options={{
           tabBarIcon: ({focused, color, size}) => (
-            <CopilotStep text="This is the history tab" order={6} name="History">
-                <CopilotView >
-            <CustomIcon
-              name="bell"
-              size={25}
-              color={
-                focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
-              }
-            />
-             </CopilotView>
-        </CopilotStep>
+            <CopilotStep 
+  text={`📋 Order History\n\n• Track all your previous orders\n• Reorder your favorites\n• Manage your history easily`} 
+  order={7} 
+  name="History"
+>
+              <CopilotView>
+                <CustomIcon
+                  name="bell"
+                  size={25}
+                  color={
+                    focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
+                  }
+                />
+              </CopilotView>
+            </CopilotStep>
           ),
         }}></Tab.Screen>
     </Tab.Navigator>
