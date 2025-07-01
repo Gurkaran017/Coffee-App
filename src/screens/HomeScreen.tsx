@@ -8,7 +8,7 @@ import {
   View,
   ToastAndroid,
 } from 'react-native';
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState , useCallback} from 'react'
 import { useStore } from '../store/store'
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {
@@ -23,6 +23,18 @@ import CustomIcon from '../components/CustomIcon';
 import {FlatList} from 'react-native';
 import CoffeeCard from '../components/CoffeeCard';
 import {Dimensions} from 'react-native';
+import {
+  CopilotStep,
+  walkthroughable,
+  useCopilot,
+} from 'react-native-copilot';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AppState } from 'react-native';
+
+
+const CopilotView = walkthroughable(View);
+
+
 
 
 const getCategoriesFromData = (data: any) => {
@@ -47,6 +59,7 @@ const getCoffeeList = (category: string, data: any) => {
     return coffeelist;
   }
 };
+
 
 
 const HomeScreen = ({navigation} : any ) => {
@@ -128,6 +141,61 @@ const HomeScreen = ({navigation} : any ) => {
   }
   // console.log("categories= ",categories)
 
+//   const { start, copilotEvents  } = useCopilot();
+
+//   useEffect(() => {
+//   const handleStart = async () => {
+//     try {
+//       const hasSeen = await AsyncStorage.getItem('hasSeenTour');
+//       if (!hasSeen) {
+//         await start();
+//         await AsyncStorage.setItem('hasSeenTour', 'true');
+//       }
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   };
+
+//   copilotEvents.on('start', handleStart);
+  
+//   // Start the tour after a short delay
+//   const timer = setTimeout(() => {
+//     handleStart();
+//   }, 1000);
+
+//   return () => {
+//     copilotEvents.off('start', handleStart);
+//     clearTimeout(timer);
+//   };
+// }, [start, copilotEvents]);
+
+
+  // const [ready, setReady] = useState(false);  
+  // if(ready===false){
+  //   const runTour = async () => {
+  //     try {
+  //       // await AsyncStorage.removeItem('hasSeenTour');
+  //       const hasSeen = await AsyncStorage.getItem('hasSeenTour');
+  //       if (!hasSeen) {
+  //       //   console.log('⏳ Starting Copilot in 3s');
+  //         setTimeout(async () => {
+  //           start();
+  //           await AsyncStorage.setItem('hasSeenTour', 'true');
+  //           // await AsyncStorage.removeItem('hasSeenTour'); // Only during testing
+  //         }, 3000);
+  //         setReady(prev => !prev);
+  //         // setReady(false);
+  //       } else {
+  //         console.log('✅ Tour already seen');
+  //       }
+  //     } catch (err) {
+  //       console.log('⚠️ Error checking AsyncStorage', err);
+  //     }
+  //   };
+
+  //   runTour();
+  // }
+
   return (
     <View style={styles.ScreenContainer}>
       <StatusBar backgroundColor={COLORS.primaryBlackHex} />
@@ -142,7 +210,10 @@ const HomeScreen = ({navigation} : any ) => {
 
         {/* Search Input */}
 
-        <View style={styles.InputContainerComponent}>
+        {/* <View style={styles.InputContainerComponent}> */}
+        <CopilotStep text="This is the search bar. Use it to find any coffee or bean." order={1} name="searchBar">
+        <CopilotView style={styles.InputContainerComponent}>
+
           <TouchableOpacity
             onPress={() => {
               searchCoffee(searchText);
@@ -183,7 +254,9 @@ const HomeScreen = ({navigation} : any ) => {
           ) : (
             <></>
           )}
-        </View>
+          </CopilotView>
+</CopilotStep>
+
 
         {/* Category Scroller */}
 
@@ -227,7 +300,9 @@ const HomeScreen = ({navigation} : any ) => {
         </ScrollView>
 
         {/* Coffee Flatlist */}
-
+        
+        <CopilotStep text="These are the available coffee options." order={2} name="coffeeList">
+  <CopilotView>
         <FlatList
           ref={ListRef}
           horizontal
@@ -266,11 +341,14 @@ const HomeScreen = ({navigation} : any ) => {
             );
           }}
         />
+        </CopilotView>
+</CopilotStep>
 
         <Text style={styles.CoffeeBeansTitle}>Coffee Beans</Text>
 
         {/* Beans Flatlist */}
-
+        <CopilotStep text="You can also find fresh coffee beans here." order={3} name="beanList">
+  <CopilotView>
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -306,6 +384,8 @@ const HomeScreen = ({navigation} : any ) => {
             );
           }}
         />
+        </CopilotView>
+</CopilotStep>
 
         </ScrollView>
     </View>

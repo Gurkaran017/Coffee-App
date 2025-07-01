@@ -25,7 +25,7 @@ export const useStore = create(
                         let size = false;
                         for (let j = 0; j < state.CartList[i].prices.length; j++) {
                           if (
-                            state.CartList[i].prices[j].size == cartItem.prices[0].size
+                            state.CartList[i].prices[j].size == cartItem.prices[0].size  
                           ) {
                             size = true;
                             state.CartList[i].prices[j].quantity++;

@@ -1,5 +1,5 @@
-import React from 'react';
-import {StyleSheet} from 'react-native';
+import React, { useEffect } from 'react';
+import {StyleSheet , View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {COLORS} from '../theme/theme';
 import {BlurView} from '@react-native-community/blur';
@@ -8,10 +8,47 @@ import FavoritesScreen from '../screens/FavoritesScreen';
 import CartScreen from '../screens/CartScreen';
 import OrderHistoryScreen from '../screens/OrderHistoryScreen';
 import CustomIcon from '../components/CustomIcon';
+import {
+  CopilotStep,
+  walkthroughable,
+  useCopilot,
+} from 'react-native-copilot';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 
+const CopilotView = walkthroughable(View);
+
+
 const TabNavigator = () => {
+  const { start, copilotEvents  } = useCopilot();
+
+  useEffect(() => {
+  const handleStart = async () => {
+    try {
+      const hasSeen = await AsyncStorage.getItem('hasSeenTour');
+      if (!hasSeen) {
+        await start();
+        await AsyncStorage.setItem('hasSeenTour', 'true');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  copilotEvents.on('start', handleStart);
+  
+  // Start the tour after a short delay
+  const timer = setTimeout(() => {
+    handleStart();
+  }, 1000);
+
+  return () => {
+    copilotEvents.off('start', handleStart);
+    clearTimeout(timer);
+  };
+}, [start, copilotEvents]);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -25,8 +62,9 @@ const TabNavigator = () => {
             blurAmount={15}
             style={styles.BlurViewStyles}
           />
-        ),
+        ), 
       }}>
+    
       <Tab.Screen
         name="Home"
         component={HomeScreen}
@@ -39,13 +77,18 @@ const TabNavigator = () => {
                 focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
               }
             />
+            
+            
           ),
         }}></Tab.Screen>
+
       <Tab.Screen
         name="Cart"
         component={CartScreen}
         options={{
           tabBarIcon: ({focused, color, size}) => (
+            <CopilotStep text="This is the cart tab" order={4} name="cart">
+                <CopilotView >
             <CustomIcon
               name="cart"
               size={25}
@@ -53,6 +96,8 @@ const TabNavigator = () => {
                 focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
               }
             />
+             </CopilotView>
+        </CopilotStep>
           ),
         }}></Tab.Screen>
       <Tab.Screen
@@ -60,6 +105,8 @@ const TabNavigator = () => {
         component={FavoritesScreen}
         options={{
           tabBarIcon: ({focused, color, size}) => (
+            <CopilotStep text="This is the favourite tab" order={5} name="favourite">
+                <CopilotView >
             <CustomIcon
               name="like"
               size={25}
@@ -67,6 +114,8 @@ const TabNavigator = () => {
                 focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
               }
             />
+             </CopilotView>
+        </CopilotStep>
           ),
         }}></Tab.Screen>
       <Tab.Screen
@@ -74,6 +123,8 @@ const TabNavigator = () => {
         component={OrderHistoryScreen}
         options={{
           tabBarIcon: ({focused, color, size}) => (
+            <CopilotStep text="This is the history tab" order={6} name="History">
+                <CopilotView >
             <CustomIcon
               name="bell"
               size={25}
@@ -81,6 +132,8 @@ const TabNavigator = () => {
                 focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
               }
             />
+             </CopilotView>
+        </CopilotStep>
           ),
         }}></Tab.Screen>
     </Tab.Navigator>

@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   ScreenContainer: {
     flex: 1,
     backgroundColor: COLORS.primaryBlackHex,
-    paddingTop : 30
+    paddingTop : 20
   },
   LottieAnimation: {
   height: 250,
