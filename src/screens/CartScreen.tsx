@@ -3,7 +3,6 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
 } from 'react-native';
@@ -14,8 +13,11 @@ import HeaderBar from '../components/HeaderBar';
 import EmptyListAnimation from '../components/EmptyListAnimation';
 import CartItem from '../components/CartItem';
 import PaymentFooter from '../components/PaymentFooter';
+import {useTheme} from 'react-native-paper';
 
 const CartScreen = ({navigation, route}: any) => {
+  const {colors} = useTheme(); // ✅ Get system-based theme colors
+
   const CartList = useStore((state: any) => state.CartList);
   const CartPrice = useStore((state: any) => state.CartPrice);
   const incrementCartItemQuantity = useStore(
@@ -42,14 +44,16 @@ const CartScreen = ({navigation, route}: any) => {
   };
 
   return (
-    <View style={styles.ScreenContainer}>
-      <StatusBar backgroundColor={COLORS.primaryBlackHex} />
+    <View style={[styles.ScreenContainer, {backgroundColor: colors.background}]}>
+      <StatusBar
+        backgroundColor={colors.background}
+        barStyle={colors.background === '#FFFFFF' ? 'dark-content' : 'light-content'}
+      />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.ScrollViewFlex}>
-        <View
-          style={[styles.ScrollViewInnerView, {marginBottom: tabBarHeight}]}>
+        <View style={[styles.ScrollViewInnerView, {marginBottom: tabBarHeight}]}>
           <View style={styles.ItemContainer}>
             <HeaderBar title="Cart" />
             {CartList.length == 0 ? (
@@ -86,26 +90,24 @@ const CartScreen = ({navigation, route}: any) => {
               </View>
             )}
           </View>
+
           {CartList.length != 0 ? (
             <PaymentFooter
               buttonPressHandler={buttonPressHandler}
               buttonTitle="Pay"
               price={{price: CartPrice, currency: '$'}}
             />
-          ) : (
-            <></>
-          )}
-            </View>
+          ) : null}
+        </View>
       </ScrollView>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   ScreenContainer: {
     flex: 1,
-    backgroundColor: COLORS.primaryBlackHex,
-    paddingTop:20    // my written
+    paddingTop: 20, // Your custom padding
   },
   ScrollViewFlex: {
     flexGrow: 1,
@@ -123,4 +125,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CartScreen
+export default CartScreen;

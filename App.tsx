@@ -1,23 +1,34 @@
 import React, { useEffect } from 'react'
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer , DefaultTheme as NavDefaultTheme, DarkTheme as NavDarkTheme } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import PaymentScreen from './src/screens/PaymentScreen'
 import DetailsScreen from './src/screens/DetailsScreen'
 import TabNavigators from './src/navigators/TabNavigators';
 import { CopilotProvider } from "react-native-copilot";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CustomTooltip from './src/components/CustomTooltip';
+import { Provider as PaperProvider } from 'react-native-paper';
+import { useColorScheme } from 'react-native';
+import { AppDarkTheme, AppLightTheme } from './src/theme/appThemes';
+import { MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
+
 
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
 
-   useEffect(() => {
-    const resetTour = async () => {
-      await AsyncStorage.removeItem('hasSeenTour'); // Remove this line in production
-    };
-    resetTour();
-  }, []);
+  const scheme = useColorScheme(); // returns 'dark' or 'light'
+
+  const paperTheme = scheme === 'dark' ? AppDarkTheme : AppLightTheme;
+  const navTheme = scheme === 'dark' ? NavDarkTheme : NavDefaultTheme;
+
+  //  useEffect(() => {
+  //   const resetTour = async () => {
+  //     await AsyncStorage.removeItem('hasSeenTour'); // Remove this line in production
+  //   };
+  //   resetTour();
+  // }, []);
 
   return (
     <CopilotProvider
@@ -38,6 +49,7 @@ const App = () => {
         finish: 'Got it!',
       }}
     >
+      <PaperProvider theme={paperTheme}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen
@@ -57,6 +69,7 @@ const App = () => {
           ></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
+      </PaperProvider>
     </CopilotProvider>
   )
 }

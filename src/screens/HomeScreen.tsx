@@ -30,6 +30,7 @@ import {
 } from 'react-native-copilot';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AppState } from 'react-native';
+import { useTheme } from 'react-native-paper';
 
 const CopilotView = walkthroughable(View);
 
@@ -57,6 +58,7 @@ const getCoffeeList = (category: string, data: any) => {
 };
 
 const HomeScreen = ({navigation} : any ) => {
+  const { colors } = useTheme();
   const CoffeeList = useStore((state: any) => state.CoffeeList);
   const BeanList = useStore((state: any) => state.BeanList);
   const addToCart = useStore((state: any) => state.addToCart);
@@ -131,14 +133,14 @@ const HomeScreen = ({navigation} : any ) => {
   }
 
   return (
-    <View style={styles.ScreenContainer}>
+    <View style={[styles.ScreenContainer, { backgroundColor: colors.background }]}>
       <StatusBar backgroundColor={COLORS.primaryBlackHex} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.ScrollViewFlex}>
         {/* App Header */}
         <HeaderBar />
-        <Text style={styles.ScreenTitle}>
+        <Text style={[styles.ScreenTitle, { color: colors.onBackground }]}>
           Find the best{'\n'}coffee for you
         </Text>
 
@@ -149,7 +151,7 @@ const HomeScreen = ({navigation} : any ) => {
   name="searchBar"
 >
 
-          <CopilotView style={styles.InputContainerComponent}>
+          <CopilotView style={[styles.InputContainerComponent, { backgroundColor: colors.surface }]}>
             <TouchableOpacity
               onPress={() => {
                 searchCoffee(searchText);
@@ -173,7 +175,7 @@ const HomeScreen = ({navigation} : any ) => {
                 searchCoffee(text);
               }}
               placeholderTextColor={COLORS.primaryLightGreyHex}
-              style={styles.TextInputContainer}
+              style={[styles.TextInputContainer, { color: colors.onSurface }]}
             />
             {searchText.length > 0 ? (
               <TouchableOpacity
@@ -291,7 +293,7 @@ const HomeScreen = ({navigation} : any ) => {
           </CopilotView>
         </CopilotStep>
 
-        <Text style={styles.CoffeeBeansTitle}>Coffee Beans</Text>
+        <Text style={[styles.CoffeeBeansTitle, { color: colors.onSurface }]}>Coffee Beans</Text>
 
         {/* Beans Flatlist */}
        <CopilotStep 

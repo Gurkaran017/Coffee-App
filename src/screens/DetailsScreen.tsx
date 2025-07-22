@@ -18,8 +18,10 @@ import {
 } from '../theme/theme';
 import ImageBackgroundInfo from '../components/ImageBackgroundInfo';
 import PaymentFooter from '../components/PaymentFooter';
+import { useTheme } from 'react-native-paper';
 
 const DetailsScreen = ({navigation, route}: any) => {
+  const { colors } = useTheme();
 
   const ItemOfIndex = useStore((state: any) =>
     route.params.type == 'Coffee' ? state.CoffeeList : state.BeanList,
@@ -72,7 +74,7 @@ const DetailsScreen = ({navigation, route}: any) => {
   
 
   return (
-    <View style={styles.ScreenContainer}>
+    <View style={[styles.ScreenContainer, { backgroundColor: colors.surface }]}>
       <StatusBar backgroundColor={COLORS.primaryBlackHex}/>  
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -93,7 +95,7 @@ const DetailsScreen = ({navigation, route}: any) => {
           ToggleFavourite={ToggleFavourite}
         />
         <View style={styles.FooterInfoArea}>
-          <Text style={styles.InfoTitle}>Description</Text>
+          <Text style={[styles.InfoTitle, { color: colors.onSurface }]}>Description</Text>
           {fullDesc ? (
             <TouchableWithoutFeedback
               onPress={() => {
@@ -108,12 +110,12 @@ const DetailsScreen = ({navigation, route}: any) => {
               onPress={() => {
                 setFullDesc(prev => !prev);
               }}>
-              <Text numberOfLines={3} style={styles.DescriptionText}>
+              <Text numberOfLines={3} style={[styles.DescriptionText, { color: colors.onSurface }]}>
                 {ItemOfIndex.description}
               </Text>
             </TouchableWithoutFeedback>
           )}
-          <Text style={styles.InfoTitle}>Size</Text>
+          <Text style={[styles.InfoTitle, { color: colors.onBackground }]}>Size</Text>
           <View style={styles.SizeOuterContainer}>
             {ItemOfIndex.prices.map((data: any) => (
               <TouchableOpacity

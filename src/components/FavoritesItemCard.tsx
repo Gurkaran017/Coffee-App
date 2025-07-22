@@ -9,6 +9,7 @@ import {
   FONTSIZE,
   SPACING,
 } from '../theme/theme';
+import {useTheme} from 'react-native-paper';
 
 interface FavoritesItemCardProps {
   id: string;
@@ -39,6 +40,8 @@ const FavoritesItemCard: React.FC<FavoritesItemCardProps> = ({
   favourite,
   ToggleFavouriteItem,
 }) => {
+  const {colors} = useTheme();
+
   return (
     <View style={styles.CardContainer}>
       <ImageBackgroundInfo
@@ -58,10 +61,10 @@ const FavoritesItemCard: React.FC<FavoritesItemCardProps> = ({
       <LinearGradient
         start={{x: 0, y: 0}}
         end={{x: 1, y: 1}}
-        colors={[COLORS.primaryGreyHex, COLORS.primaryBlackHex]}
+        colors={[colors.elevation?.level1 || COLORS.primaryGreyHex, colors.surface || COLORS.primaryBlackHex]}
         style={styles.ContainerLinearGradient}>
-        <Text style={styles.DescriptionTitle}>Description</Text>
-        <Text style={styles.DescriptionText}>{description}</Text>
+        <Text style={[styles.DescriptionTitle, {color: colors.onSurface}]}>Description</Text>
+        <Text style={[styles.DescriptionText, {color: colors.onBackground}]}>{description}</Text>
       </LinearGradient>
     </View>
   );
@@ -79,12 +82,10 @@ const styles = StyleSheet.create({
   DescriptionTitle: {
     fontFamily: FONTFAMILY.poppins_semibold,
     fontSize: FONTSIZE.size_16,
-    color: COLORS.secondaryLightGreyHex,
   },
   DescriptionText: {
     fontFamily: FONTFAMILY.poppins_regular,
     fontSize: FONTSIZE.size_14,
-    color: COLORS.primaryWhiteHex,
   },
 });
 

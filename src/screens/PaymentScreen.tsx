@@ -21,6 +21,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import CustomIcon from '../components/CustomIcon';
 import {useStore} from '../store/store';
 import PopUpAnimation from '../components/PopUpAnimation';
+import {useTheme} from 'react-native-paper';
 
 const PaymentList = [
   {
@@ -46,6 +47,7 @@ const PaymentList = [
 ];
 
 const PaymentScreen = ({navigation, route}: any) => {
+  const {colors} = useTheme();
   const calculateCartPrice = useStore((state: any) => state.calculateCartPrice);
   const addToOrderHistoryListFromCart = useStore(
     (state: any) => state.addToOrderHistoryListFromCart,
@@ -65,8 +67,8 @@ const PaymentScreen = ({navigation, route}: any) => {
   };
 
   return (
-    <View style={styles.ScreenContainer}>
-      <StatusBar backgroundColor={COLORS.primaryBlackHex} />
+    <View style={[styles.ScreenContainer, {backgroundColor: colors.background}]}>
+      <StatusBar backgroundColor={colors.background} />
 
       {showAnimation ? (
         <PopUpAnimation
@@ -91,7 +93,7 @@ const PaymentScreen = ({navigation, route}: any) => {
               size={FONTSIZE.size_16}
             />
           </TouchableOpacity>
-          <Text style={styles.HeaderText}>Payments</Text>
+          <Text style={[styles.HeaderText, {color: colors.onBackground}]}>Payments</Text>
           <View style={styles.EmptyView} />
         </View>
 
@@ -107,16 +109,16 @@ const PaymentScreen = ({navigation, route}: any) => {
                   borderColor:
                     paymentMode == 'Credit Card'
                       ? COLORS.primaryOrangeHex
-                      : COLORS.primaryGreyHex,
+                      : colors.surfaceVariant || COLORS.primaryGreyHex,
                 },
               ]}>
-              <Text style={styles.CreditCardTitle}>Credit Card</Text>
-              <View style={styles.CreditCardBG}>
+              <Text style={[styles.CreditCardTitle, {color: colors.onBackground}]}>Credit Card</Text>
+              <View style={[styles.CreditCardBG, {backgroundColor: colors.surfaceVariant}]}>
                 <LinearGradient
                   start={{x: 0, y: 0}}
                   end={{x: 1, y: 1}}
                   style={styles.LinearGradientStyle}
-                  colors={[COLORS.primaryGreyHex, COLORS.primaryBlackHex]}>
+                  colors={[colors.elevation?.level1 || COLORS.primaryGreyHex, colors.surface || COLORS.primaryBlackHex]}>
                   <View style={styles.CreditCardRow}>
                     <CustomIcon
                       name="chip"
@@ -126,29 +128,29 @@ const PaymentScreen = ({navigation, route}: any) => {
                     <CustomIcon
                       name="visa"
                       size={FONTSIZE.size_30 * 2}
-                      color={COLORS.primaryWhiteHex}
+                      color={colors.onBackground}
                     />
                   </View>
                   <View style={styles.CreditCardNumberContainer}>
-                    <Text style={styles.CreditCardNumber}>3879</Text>
-                    <Text style={styles.CreditCardNumber}>8923</Text>
-                    <Text style={styles.CreditCardNumber}>6745</Text>
-                    <Text style={styles.CreditCardNumber}>4638</Text>
+                    <Text style={[styles.CreditCardNumber, {color: colors.onBackground}]}>3879</Text>
+                    <Text style={[styles.CreditCardNumber, {color: colors.onBackground}]}>8923</Text>
+                    <Text style={[styles.CreditCardNumber, {color: colors.onBackground}]}>6745</Text>
+                    <Text style={[styles.CreditCardNumber, {color: colors.onBackground}]}>4638</Text>
                   </View>
                   <View style={styles.CreditCardRow}>
                     <View style={styles.CreditCardNameContainer}>
-                      <Text style={styles.CreditCardNameSubitle}>
+                      <Text style={[styles.CreditCardNameSubitle, {color: colors.onSurfaceVariant}]}>
                         Card Holder Name
                       </Text>
-                      <Text style={styles.CreditCardNameTitle}>
+                      <Text style={[styles.CreditCardNameTitle, {color: colors.onBackground}]}>
                         Robert Evans
                       </Text>
                     </View>
                     <View style={styles.CreditCardDateContainer}>
-                      <Text style={styles.CreditCardNameSubitle}>
+                      <Text style={[styles.CreditCardNameSubitle, {color: colors.onSurfaceVariant}]}>
                         Expiry Date
                       </Text>
-                      <Text style={styles.CreditCardNameTitle}>02/30</Text>
+                      <Text style={[styles.CreditCardNameTitle, {color: colors.onBackground}]}>02/30</Text>
                     </View>
                   </View>
                 </LinearGradient>
@@ -184,8 +186,7 @@ const PaymentScreen = ({navigation, route}: any) => {
 const styles = StyleSheet.create({
   ScreenContainer: {
     flex: 1,
-    backgroundColor: COLORS.primaryBlackHex,
-    paddingTop:30    // my written
+    paddingTop: 30
   },
   LottieAnimation: {
     flex: 1,
@@ -203,7 +204,6 @@ const styles = StyleSheet.create({
   HeaderText: {
     fontFamily: FONTFAMILY.poppins_semibold,
     fontSize: FONTSIZE.size_20,
-    color: COLORS.primaryWhiteHex,
   },
   EmptyView: {
     height: SPACING.space_36,
@@ -222,11 +222,9 @@ const styles = StyleSheet.create({
   CreditCardTitle: {
     fontFamily: FONTFAMILY.poppins_semibold,
     fontSize: FONTSIZE.size_14,
-    color: COLORS.primaryWhiteHex,
     marginLeft: SPACING.space_10,
   },
   CreditCardBG: {
-    backgroundColor: COLORS.primaryGreyHex,
     borderRadius: BORDERRADIUS.radius_25,
   },
   LinearGradientStyle: {
@@ -248,18 +246,15 @@ const styles = StyleSheet.create({
   CreditCardNumber: {
     fontFamily: FONTFAMILY.poppins_semibold,
     fontSize: FONTSIZE.size_18,
-    color: COLORS.primaryWhiteHex,
     letterSpacing: SPACING.space_4 + SPACING.space_2,
   },
   CreditCardNameSubitle: {
     fontFamily: FONTFAMILY.poppins_regular,
     fontSize: FONTSIZE.size_12,
-    color: COLORS.secondaryLightGreyHex,
   },
   CreditCardNameTitle: {
     fontFamily: FONTFAMILY.poppins_medium,
     fontSize: FONTSIZE.size_18,
-    color: COLORS.primaryWhiteHex,
   },
   CreditCardNameContainer: {
     alignItems: 'flex-start',

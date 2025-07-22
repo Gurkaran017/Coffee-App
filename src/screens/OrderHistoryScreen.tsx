@@ -20,8 +20,10 @@ import HeaderBar from '../components/HeaderBar';
 import EmptyListAnimation from '../components/EmptyListAnimation';
 import PopUpAnimation from '../components/PopUpAnimation';
 import OrderHistoryCard from '../components/OrderHistoryCard';
+import {useTheme} from 'react-native-paper';
 
 const OrderHistoryScreen = ({navigation}: any) => {
+  const {colors} = useTheme();
   const OrderHistoryList = useStore((state: any) => state.OrderHistoryList);
   const tabBarHeight = useBottomTabBarHeight();
   const [showAnimation, setShowAnimation] = useState(false);
@@ -42,8 +44,8 @@ const OrderHistoryScreen = ({navigation}: any) => {
   };
 
   return (
-    <View style={styles.ScreenContainer}>
-      <StatusBar backgroundColor={COLORS.primaryBlackHex} />
+    <View style={[styles.ScreenContainer, {backgroundColor: colors.background}]}>
+      <StatusBar backgroundColor={colors.background} />
 
       {showAnimation ? (
         <PopUpAnimation
@@ -80,7 +82,7 @@ const OrderHistoryScreen = ({navigation}: any) => {
           </View>
           {OrderHistoryList.length > 0 ? (
             <TouchableOpacity
-              style={styles.DownloadButton}
+              style={[styles.DownloadButton, {backgroundColor: colors.primary}]}
               onPress={() => {
                 buttonPressHandler();
               }}>
@@ -98,17 +100,16 @@ const OrderHistoryScreen = ({navigation}: any) => {
 const styles = StyleSheet.create({
   ScreenContainer: {
     flex: 1,
-    backgroundColor: COLORS.primaryBlackHex,
-    paddingTop : 20
+    paddingTop: 20
   },
   LottieAnimation: {
-  height: 250,
-  width: 250,
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: [{ translateX: -125 }, { translateY: -125 }],
-  zIndex: 10,
+    height: 250,
+    width: 250,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -125 }, { translateY: -125 }],
+    zIndex: 10,
   },
   ScrollViewFlex: {
     flexGrow: 1,
@@ -126,7 +127,6 @@ const styles = StyleSheet.create({
   },
   DownloadButton: {
     margin: SPACING.space_20,
-    backgroundColor: COLORS.primaryOrangeHex,
     alignItems: 'center',
     justifyContent: 'center',
     height: SPACING.space_36 * 2,

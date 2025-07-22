@@ -13,20 +13,24 @@ import {COLORS, SPACING} from '../theme/theme';
 import HeaderBar from '../components/HeaderBar';
 import EmptyListAnimation from '../components/EmptyListAnimation';
 import FavoritesItemCard from '../components/FavoritesItemCard';
+import {useTheme} from 'react-native-paper';
 
 const FavoritesScreen = ({navigation}: any) => {
+  const {colors} = useTheme();
   const FavoritesList = useStore((state: any) => state.FavoritesList);
   const tabBarHeight = useBottomTabBarHeight();
   const addToFavoriteList = useStore((state: any) => state.addToFavoriteList);
   const deleteFromFavoriteList = useStore(
     (state: any) => state.deleteFromFavoriteList,
   );
+  
   const ToggleFavourite = (favourite: boolean, type: string, id: string) => {
     favourite ? deleteFromFavoriteList(type, id) : addToFavoriteList(type, id);
   };
+
   return (
-    <View style={styles.ScreenContainer}>
-      <StatusBar backgroundColor={COLORS.primaryBlackHex} />
+    <View style={[styles.ScreenContainer, {backgroundColor: colors.background}]}>
+      <StatusBar backgroundColor={colors.background} />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -78,8 +82,7 @@ const FavoritesScreen = ({navigation}: any) => {
 const styles = StyleSheet.create({
   ScreenContainer: {
     flex: 1,
-    backgroundColor: COLORS.primaryBlackHex,
-    paddingTop:20
+    paddingTop: 20
   },
   ScrollViewFlex: {
     flexGrow: 1,

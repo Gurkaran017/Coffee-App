@@ -18,6 +18,7 @@ import {
 } from '../theme/theme';
 import CustomIcon from './CustomIcon';
 import BGIcon from './BGIcon';
+import { useTheme } from 'react-native-paper';
 
 const CARD_WIDTH = Dimensions.get('window').width * 0.32;
 
@@ -46,30 +47,46 @@ const CoffeeCard: React.FC<CoffeeCardProps> = ({
   price,
   buttonPressHandler,
 }) => {
+  const { colors } = useTheme();
+
   return (
     <LinearGradient
-      start={{x: 0, y: 0}}
-      end={{x: 1, y: 1}}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
       style={styles.CardLinearGradientContainer}
-      colors={[COLORS.primaryGreyHex, COLORS.primaryBlackHex]}>
+      colors={[
+        colors.elevation?.level1 || COLORS.primaryGreyHex,
+        colors.surface || COLORS.primaryBlackHex,
+      ]}
+    >
       <ImageBackground
         source={imagelink_square}
         style={styles.CardImageBG}
-        resizeMode="cover">
-        <View style={styles.CardRatingContainer}>
+        resizeMode="cover"
+      >
+        <View
+          style={[
+            styles.CardRatingContainer,
+            { backgroundColor: colors.surfaceVariant || COLORS.primaryBlackRGBA },
+          ]}
+        >
           <CustomIcon
             name={'star'}
             color={COLORS.primaryOrangeHex}
             size={FONTSIZE.size_16}
           />
-          <Text style={styles.CardRatingText}>{average_rating}</Text>
+          <Text style={[styles.CardRatingText, { color: colors.onSurface }]}>
+            {average_rating}
+          </Text>
         </View>
       </ImageBackground>
-      <Text style={styles.CardTitle}>{name}</Text>
-      <Text style={styles.CardSubtitle}>{special_ingredient}</Text>
+
+      <Text style={[styles.CardTitle, { color: colors.onBackground }]}>{name}</Text>
+      <Text style={[styles.CardSubtitle, { color: colors.onSurface }]}>{special_ingredient}</Text>
+
       <View style={styles.CardFooterRow}>
-        <Text style={styles.CardPriceCurrency}>
-          $ <Text style={styles.CardPrice}>{price.price}</Text>
+        <Text style={[styles.CardPriceCurrency, { color: COLORS.primaryOrangeHex }]}>
+          $ <Text style={[styles.CardPrice, { color: colors.onBackground }]}>{price.price}</Text>
         </Text>
         <TouchableOpacity
           onPress={() => {
@@ -81,11 +98,12 @@ const CoffeeCard: React.FC<CoffeeCardProps> = ({
               imagelink_square,
               name,
               special_ingredient,
-              prices: [{...price, quantity: 1}],
+              prices: [{ ...price, quantity: 1 }],
             });
-          }}>
+          }}
+        >
           <BGIcon
-            color={COLORS.primaryWhiteHex}
+            color={colors.onPrimary}
             name={'add'}
             BGColor={COLORS.primaryOrangeHex}
             size={FONTSIZE.size_10}
@@ -110,7 +128,6 @@ const styles = StyleSheet.create({
   },
   CardRatingContainer: {
     flexDirection: 'row',
-    backgroundColor: COLORS.primaryBlackRGBA,
     alignItems: 'center',
     justifyContent: 'center',
     gap: SPACING.space_10,
@@ -123,18 +140,15 @@ const styles = StyleSheet.create({
   },
   CardRatingText: {
     fontFamily: FONTFAMILY.poppins_medium,
-    color: COLORS.primaryWhiteHex,
     lineHeight: 22,
     fontSize: FONTSIZE.size_14,
   },
   CardTitle: {
     fontFamily: FONTFAMILY.poppins_medium,
-    color: COLORS.primaryWhiteHex,
     fontSize: FONTSIZE.size_16,
   },
   CardSubtitle: {
     fontFamily: FONTFAMILY.poppins_light,
-    color: COLORS.primaryWhiteHex,
     fontSize: FONTSIZE.size_10,
   },
   CardFooterRow: {
@@ -145,11 +159,10 @@ const styles = StyleSheet.create({
   },
   CardPriceCurrency: {
     fontFamily: FONTFAMILY.poppins_semibold,
-    color: COLORS.primaryOrangeHex,
     fontSize: FONTSIZE.size_18,
   },
   CardPrice: {
-    color: COLORS.primaryWhiteHex,
+    fontFamily: FONTFAMILY.poppins_semibold,
   },
 });
 

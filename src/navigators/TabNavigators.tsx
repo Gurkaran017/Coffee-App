@@ -14,12 +14,14 @@ import {
   useCopilot,
 } from 'react-native-copilot';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTheme } from 'react-native-paper';
 
 const Tab = createBottomTabNavigator();
 const CopilotView = walkthroughable(View);
 
 const TabNavigator = () => {
   const { start, copilotEvents  } = useCopilot();
+  const theme = useTheme(); 
 
   useEffect(() => {
     const handleStart = async () => {
@@ -53,7 +55,13 @@ const TabNavigator = () => {
         tabBarHideOnKeyboard: true,
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarStyle: styles.tabBarStyle,
+        // tabBarStyle: styles.tabBarStyle,
+        tabBarStyle: [
+          styles.tabBarStyle,
+          {
+            backgroundColor: theme.colors.elevation.level0, // ✅ dynamic background
+          },
+        ],
         tabBarBackground: () => (
           <BlurView
             overlayColor=""

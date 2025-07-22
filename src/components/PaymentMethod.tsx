@@ -9,6 +9,7 @@ import {
   SPACING,
 } from '../theme/theme';
 import CustomIcon from './CustomIcon';
+import {useTheme} from 'react-native-paper';
 
 interface PaymentMethodProps {
   paymentMode: string;
@@ -23,6 +24,8 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
   icon,
   isIcon,
 }) => {
+  const {colors} = useTheme();
+
   return (
     <View
       style={[
@@ -31,14 +34,15 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
           borderColor:
             paymentMode == name
               ? COLORS.primaryOrangeHex
-              : COLORS.primaryGreyHex,
+              : colors.surfaceVariant || COLORS.primaryGreyHex,
+          backgroundColor: colors.surfaceVariant || COLORS.primaryGreyHex,
         },
       ]}>
       {isIcon ? (
         <LinearGradient
           start={{x: 0, y: 0}}
           end={{x: 1, y: 1}}
-          colors={[COLORS.primaryGreyHex, COLORS.primaryBlackHex]}
+          colors={[colors.elevation?.level1 || COLORS.primaryGreyHex, colors.surface || COLORS.primaryBlackHex]}
           style={styles.LinearGradientWallet}>
           <View style={styles.WalletRow}>
             <CustomIcon
@@ -46,18 +50,18 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
               color={COLORS.primaryOrangeHex}
               size={FONTSIZE.size_30}
             />
-            <Text style={styles.PaymentTitle}>{name}</Text>
+            <Text style={[styles.PaymentTitle, {color: colors.onSurface}]}>{name}</Text>
           </View>
-          <Text style={styles.PaymentPrice}>$ 100.50</Text>
+          <Text style={[styles.PaymentPrice, {color: colors.onSurfaceVariant}]}>$ 100.50</Text>
         </LinearGradient>
       ) : (
         <LinearGradient
           start={{x: 0, y: 0}}
           end={{x: 1, y: 1}}
-          colors={[COLORS.primaryGreyHex, COLORS.primaryBlackHex]}
+          colors={[colors.elevation?.level1 || COLORS.primaryGreyHex, colors.surface || COLORS.primaryBlackHex]}
           style={styles.LinearGradientRegular}>
           <Image source={icon} style={styles.PaymentImage} />
-          <Text style={styles.PaymentTitle}>{name}</Text>
+          <Text style={[styles.PaymentTitle, {color: colors.onSurface}]}>{name}</Text>
         </LinearGradient>
       )}
     </View>
@@ -67,7 +71,6 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
 const styles = StyleSheet.create({
   PaymentCardContainer: {
     borderRadius: BORDERRADIUS.radius_15 * 2,
-    backgroundColor: COLORS.primaryGreyHex,
     borderWidth: 3,
   },
   LinearGradientWallet: {
@@ -95,12 +98,10 @@ const styles = StyleSheet.create({
   PaymentTitle: {
     fontFamily: FONTFAMILY.poppins_semibold,
     fontSize: FONTSIZE.size_16,
-    color: COLORS.primaryWhiteHex,
   },
   PaymentPrice: {
     fontFamily: FONTFAMILY.poppins_regular,
     fontSize: FONTSIZE.size_16,
-    color: COLORS.secondaryLightGreyHex,
   },
   PaymentImage: {
     height: SPACING.space_30,

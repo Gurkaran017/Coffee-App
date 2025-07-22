@@ -3,6 +3,7 @@ import React from 'react'
 import {COLORS, FONTFAMILY, FONTSIZE, SPACING} from '../theme/theme';
 import GradientBGIcon from './GradientBGIcon';
 import ProfilePic from './ProfilePic';
+import { useTheme } from 'react-native-paper';
 
 
 interface HeaderBarProps {
@@ -10,6 +11,7 @@ interface HeaderBarProps {
 }
 
 const HeaderBar: React.FC<HeaderBarProps> = ({title}) => {
+  const { colors } = useTheme();
   return (
     <View style={styles.HeaderContainer}>
       <GradientBGIcon
@@ -17,7 +19,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({title}) => {
         color={COLORS.primaryLightGreyHex}
         size={FONTSIZE.size_16}
       />
-      <Text style={styles.HeaderText}>{title}</Text>
+      <Text style={[styles.HeaderText, { color: colors.onBackground }]}>{title}</Text>
       <ProfilePic />
     </View>
   )

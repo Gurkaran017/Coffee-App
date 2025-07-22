@@ -8,6 +8,7 @@ import {
   FONTSIZE,
   SPACING,
 } from '../theme/theme';
+import {useTheme} from 'react-native-paper';
 
 interface OrderItemCardProps {
   type: string;
@@ -26,54 +27,56 @@ const OrderItemCard: React.FC<OrderItemCardProps> = ({
   prices,
   ItemPrice,
 }) => {
+  const {colors} = useTheme();
+
   return (
     <LinearGradient
       start={{x: 0, y: 0}}
       end={{x: 1, y: 1}}
-      colors={[COLORS.primaryGreyHex, COLORS.primaryBlackHex]}
+      colors={[colors.elevation?.level1 || COLORS.primaryGreyHex, colors.surface || COLORS.primaryBlackHex]}
       style={styles.CardLinearGradient}>
       <View style={styles.CardInfoContainer}>
         <View style={styles.CardImageInfoContainer}>
           <Image source={imagelink_square} style={styles.Image} />
           <View>
-            <Text style={styles.CardTitle}>{name}</Text>
-            <Text style={styles.CardSubtitle}>{special_ingredient}</Text>
+            <Text style={[styles.CardTitle, {color: colors.onBackground}]}>{name}</Text>
+            <Text style={[styles.CardSubtitle, {color: colors.onSurfaceVariant}]}>{special_ingredient}</Text>
           </View>
         </View>
         <View>
-          <Text style={styles.CardCurrency}>
-            $ <Text style={styles.CardPrice}>{ItemPrice}</Text>
+          <Text style={[styles.CardCurrency, {color: COLORS.primaryOrangeHex}]}>
+            $ <Text style={[styles.CardPrice, {color: colors.onBackground}]}>{ItemPrice}</Text>
           </Text>
         </View>
       </View>
       {prices.map((data: any, index: any) => (
         <View key={index.toString()} style={styles.CardTableRow}>
           <View style={styles.CardTableRow}>
-            <View style={styles.SizeBoxLeft}>
+            <View style={[styles.SizeBoxLeft, {backgroundColor: colors.surface}]}>
               <Text
                 style={[
                   styles.SizeText,
                   {
-                    fontSize:
-                      type == 'Bean' ? FONTSIZE.size_12 : FONTSIZE.size_16,
+                    fontSize: type == 'Bean' ? FONTSIZE.size_12 : FONTSIZE.size_16,
+                    color: colors.onSurfaceVariant,
                   },
                 ]}>
                 {data.size}
               </Text>
             </View>
-            <View style={styles.PriceBoxRight}>
-              <Text style={styles.PriceCurrency}>
+            <View style={[styles.PriceBoxRight, {backgroundColor: colors.surface}]}>
+              <Text style={[styles.PriceCurrency, {color: COLORS.primaryOrangeHex}]}>
                 {data.currency}
-                <Text style={styles.Price}> {data.price}</Text>
+                <Text style={[styles.Price, {color: colors.onBackground}]}> {data.price}</Text>
               </Text>
             </View>
           </View>
 
           <View style={styles.CardTableRow}>
-            <Text style={styles.CardQuantityPriceText}>
-              X <Text style={styles.Price}>{data.quantity}</Text>
+            <Text style={[styles.CardQuantityPriceText, {color: COLORS.primaryOrangeHex}]}>
+              X <Text style={{color: colors.onBackground}}>{data.quantity}</Text>
             </Text>
-            <Text style={styles.CardQuantityPriceText}>
+            <Text style={[styles.CardQuantityPriceText, {color: COLORS.primaryOrangeHex}]}>
               $ {(data.quantity * data.price).toFixed(2).toString()}
             </Text>
           </View>
@@ -107,20 +110,17 @@ const styles = StyleSheet.create({
   CardTitle: {
     fontFamily: FONTFAMILY.poppins_medium,
     fontSize: FONTSIZE.size_18,
-    color: COLORS.primaryWhiteHex,
   },
   CardSubtitle: {
     fontFamily: FONTFAMILY.poppins_regular,
     fontSize: FONTSIZE.size_12,
-    color: COLORS.secondaryLightGreyHex,
   },
   CardCurrency: {
     fontFamily: FONTFAMILY.poppins_semibold,
     fontSize: FONTSIZE.size_20,
-    color: COLORS.primaryOrangeHex,
   },
   CardPrice: {
-    color: COLORS.primaryWhiteHex,
+    fontFamily: FONTFAMILY.poppins_semibold,
   },
   CardTableRow: {
     flex: 1,
@@ -129,7 +129,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   SizeBoxLeft: {
-    backgroundColor: COLORS.primaryBlackHex,
     height: 45,
     flex: 1,
     borderTopLeftRadius: BORDERRADIUS.radius_10,
@@ -141,10 +140,8 @@ const styles = StyleSheet.create({
   },
   SizeText: {
     fontFamily: FONTFAMILY.poppins_medium,
-    color: COLORS.secondaryLightGreyHex,
   },
   PriceBoxRight: {
-    backgroundColor: COLORS.primaryBlackHex,
     height: 45,
     flex: 1,
     borderTopRightRadius: BORDERRADIUS.radius_10,
@@ -157,17 +154,15 @@ const styles = StyleSheet.create({
   PriceCurrency: {
     fontFamily: FONTFAMILY.poppins_semibold,
     fontSize: FONTSIZE.size_18,
-    color: COLORS.primaryOrangeHex,
   },
   Price: {
-    color: COLORS.primaryWhiteHex,
+    fontFamily: FONTFAMILY.poppins_semibold,
   },
   CardQuantityPriceText: {
     flex: 1,
     textAlign: 'center',
     fontFamily: FONTFAMILY.poppins_semibold,
     fontSize: FONTSIZE.size_18,
-    color: COLORS.primaryOrangeHex,
   },
 });
 

@@ -7,6 +7,7 @@ import {
   FONTSIZE,
   SPACING,
 } from '../theme/theme';
+import { useTheme } from 'react-native-paper';
 
 interface PriceProps {
   price: string;
@@ -24,16 +25,18 @@ const PaymentFooter: React.FC<PaymentFooterProps> = ({
   buttonPressHandler,
   buttonTitle,
 }) => {
+  const { colors } = useTheme();
+
   return (
     <View style={styles.PriceFooter}>
       <View style={styles.PriceContainer}>
-        <Text style={styles.PriceTitle}>Price</Text>
+        <Text style={[styles.PriceTitle, {color: colors.onSurface}]}>Price</Text>
         <Text style={styles.PriceText}>
-          {price.currency} <Text style={styles.Price}>{price.price}</Text>
+          {price.currency} <Text style={[styles.Price, {color: colors.onBackground}]}>{price.price}</Text>
         </Text>
       </View>
       <TouchableOpacity
-        style={styles.PayButton}
+        style={[styles.PayButton, {backgroundColor: colors.primary}]}
         onPress={() => buttonPressHandler()}>
         <Text style={styles.ButtonText}>{buttonTitle}</Text>
       </TouchableOpacity>
@@ -56,18 +59,16 @@ const styles = StyleSheet.create({
   PriceTitle: {
     fontFamily: FONTFAMILY.poppins_medium,
     fontSize: FONTSIZE.size_14,
-    color: COLORS.secondaryLightGreyHex,
   },
   PriceText: {
     fontFamily: FONTFAMILY.poppins_semibold,
     fontSize: FONTSIZE.size_24,
-    color: COLORS.primaryOrangeHex,
+    color: COLORS.primaryOrangeHex, // Keeping orange as accent color
   },
   Price: {
-    color: COLORS.primaryWhiteHex,
+    fontFamily: FONTFAMILY.poppins_semibold,
   },
   PayButton: {
-    backgroundColor: COLORS.primaryOrangeHex,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
   ButtonText: {
     fontFamily: FONTFAMILY.poppins_semibold,
     fontSize: FONTSIZE.size_18,
-    color: COLORS.primaryWhiteHex,
+    color: COLORS.primaryWhiteHex, // White text on colored button for better contrast
   },
 });
 
